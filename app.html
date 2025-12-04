@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>العد التنازلي</title>
+<style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+    padding-top: 80px;
+    background: #f3f3f3;
+  }
+  h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  .timer {
+    font-size: 28px;
+    background: #222;
+    color: #fff;
+    padding: 20px 30px;
+    display: inline-block;
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h2>كم ضايل</h2>
+<div class="timer" id="countdown">...</div>
+
+<script>
+// Palestine timezone: UTC+2 (UTC+3 when DST, browser handles)
+function getNextThursdayAt5() {
+    const now = new Date();
+    let target = new Date(now);
+
+    // Set to Thursday (4) because Sunday=0
+    let day = target.getDay();
+    let diff = (4 - day + 7) % 7;   // 4 = Thursday
+    if (diff === 0 && target.getHours() >= 17) {
+        diff = 7; // If already Thursday 5pm passed, go next week
+    }
+    target.setDate(target.getDate() + diff);
+
+    // Set time to 5:00 PM
+    target.setHours(17, 0, 0, 0);
+
+    return target;
+}
+
+function updateCountdown() {
+    const target = getNextThursdayAt5();
+    const now = new Date();
+    const diff = target - now;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("countdown").textContent =
+        days + " يوم، " +
+        hours + " ساعة، " +
+        minutes + " دقيقة، " +
+        seconds + " ثانية";
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+</script>
+
+</body>
+</html>
